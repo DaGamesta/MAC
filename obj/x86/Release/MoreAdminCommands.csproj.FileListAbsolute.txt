@@ -1,0 +1,11 @@
+C:\Users\Michael\Documents\GitHub\MAC\obj\x86\Release\MoreAdminCommands.csprojResolveAssemblyReference.cache
+C:\Users\Michael\Documents\GitHub\MAC\bin\Release\MoreAdminCommands.dll
+C:\Users\Michael\Documents\GitHub\MAC\bin\Release\MoreAdminCommands.pdb
+C:\Users\Michael\Documents\GitHub\MAC\bin\Release\Mono.Data.Sqlite.dll
+C:\Users\Michael\Documents\GitHub\MAC\bin\Release\MySql.Data.dll
+C:\Users\Michael\Documents\GitHub\MAC\bin\Release\MySql.Web.dll
+C:\Users\Michael\Documents\GitHub\MAC\bin\Release\Newtonsoft.Json.dll
+C:\Users\Michael\Documents\GitHub\MAC\bin\Release\TerrariaServer.exe
+C:\Users\Michael\Documents\GitHub\MAC\bin\Release\TShockAPI.dll
+C:\Users\Michael\Documents\GitHub\MAC\obj\x86\Release\MoreAdminCommands.dll
+C:\Users\Michael\Documents\GitHub\MAC\obj\x86\Release\MoreAdminCommands.pdb

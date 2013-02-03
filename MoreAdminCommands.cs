@@ -184,6 +184,8 @@ namespace MoreAdminCommands
             permlist.Add("mute");
             permlist.Add("reloadmore");
             permlist.Add("permabuff");
+            permlist.Add("findperm");
+            permlist.Add("findcommand");
             TShock.Groups.AddPermissions("trustedadmin", permlist);
             for (int i = 0; i < 256; i++)
             {
@@ -214,8 +216,6 @@ namespace MoreAdminCommands
             Commands.ChatCommands.Add(new Command("autoheal", AutoHeal, "autoheal"));
             Commands.ChatCommands.Add(new Command("fly", Fly, "fly"));
             Commands.ChatCommands.Add(new Command("flymisc", Fetch, "fetch"));
-            //Commands.ChatCommands.Add(new Command("flymisc", CarpetBody, "carpetbody"));
-            //Commands.ChatCommands.Add(new Command("flymisc", CarpetSides, "carpetsides"));
             Commands.ChatCommands.Add(new Command("editspawn", Mow, "mow"));
             Commands.ChatCommands.Add(new Command("permabuff", permaBuff, "permabuff"));
             Commands.ChatCommands.Add(new Command("permabuff", permaBuffAll, "permabuffall"));
@@ -230,7 +230,6 @@ namespace MoreAdminCommands
             Commands.ChatCommands.Add(new Command("butcher", ButcherNPC, "butchernpc"));
             Commands.ChatCommands.Add(new Command("butcher", ButcherNear, "butchernear"));
             Commands.ChatCommands.Add(new Command("spawnmob", SpawnByMe, "spawnbyme"));
-            //Commands.ChatCommands.Add(new Command("clearitems", ClearItems, "clearitems"));
             Commands.ChatCommands.Add(new Command("reloadmore", ReloadMore, "reloadmore"));
             Commands.ChatCommands.Add(new Command("viewall", ViewAll, "viewall"));
             Commands.ChatCommands.Add(new Command(null, TeamUnlock, "teamunlock"));
@@ -240,10 +239,100 @@ namespace MoreAdminCommands
             Commands.ChatCommands.Add(new Command("antitp", TPOff, "tpoff"));
             Commands.ChatCommands.Add(new Command("moonphase", MoonPhase, "moonphase"));
             Commands.ChatCommands.Add(new Command("findperm", FindPerms, "findperm"));
+            Commands.ChatCommands.Add(new Command("findcommand", FindCommand, "findcommand"));
         }
 
         private DateTime LastCheck = DateTime.UtcNow;
         private DateTime OtherLastCheck = DateTime.UtcNow;
+
+        public static void FindCommand(CommandArgs args)
+        {
+
+            if (args.Parameters.Count > 0)
+            {
+
+                List<string> commandNameList = new List<string>();
+
+                foreach (Command command in Commands.ChatCommands)
+                {
+
+                    if (args.Player.Group.HasPermission(command.Permission))
+                    {
+
+                        foreach (string commandName in command.Names)
+                        {
+
+                            bool showCommand = true;
+                            foreach (string searchParameter in args.Parameters)
+                            {
+
+                                if (!commandName.Contains(searchParameter))
+                                {
+
+                                    showCommand = false;
+                                    break;
+
+                                }
+
+                            }
+                            if (showCommand && !commandNameList.Contains(commandName))
+                            {
+
+                                commandNameList.Add(command.Name);
+
+                            }
+
+                        }
+
+                    }
+
+                }
+                if (commandNameList.Count > 0)
+                {
+
+                    args.Player.SendMessage("The following commands matched your search:", Color.Yellow);
+                    for (int i = 0; i < commandNameList.Count && i < 6; i++)
+                    {
+
+                        string returnLine = "";
+                        for (int j = 0; j < commandNameList.Count - i * 5 && j < 5; j++)
+                        {
+
+                            if (i * 5 + j + 1 < commandNameList.Count)
+                            {
+
+                                returnLine += commandNameList[i * 5 + j] + ", ";
+
+                            }
+                            else
+                            {
+
+                                returnLine += commandNameList[i * 5 + j] + ".";
+
+                            }
+
+                        }
+                        args.Player.SendMessage(returnLine, Color.Yellow);
+
+                    }
+
+                }
+                else
+                {
+
+                    args.Player.SendMessage("No Commands matched your search term(s).", Color.Red);
+
+                }
+
+            }
+            else
+            {
+
+                args.Player.SendMessage("Please enter search term(s).  Syntax is /findcommand searchterm0 [searchterm1 searchterm2 ...]", Color.Red);
+
+            }
+
+        }
 		
         public static void FindPerms(CommandArgs args)
         {
@@ -253,15 +342,15 @@ namespace MoreAdminCommands
 	        	{
 	        		if (cmd.Names.Contains(args.Parameters[0]))
 	        		{
-	        			args.Player.SendInfoMessage(string.Format("Permission to use {0}: {1}", cmd.Name, cmd.Permission != "" ? cmd.Permission : "Nothing"));
+	        			args.Player.SendMessage(string.Format("Permission to use {0}: {1}", cmd.Name, cmd.Permission != "" ? cmd.Permission : "Nothing"), Color.Yellow);
 	        			return;
 	        		}
 	        	}
-	        	args.Player.SendErrorMessage("That command could not be found.");
+	        	args.Player.SendMessage("That command could not be found.", Color.Red);
         	}
         	else
         	{
-        		args.Player.SendErrorMessage("Too many or not enough parameters. The format is: /findperm [command name]");
+        		args.Player.SendMessage("Too many or not enough parameters. The format is: /findperm [command name]", Color.Red);
         	}
         }
         
